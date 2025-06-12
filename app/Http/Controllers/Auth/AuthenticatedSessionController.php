@@ -29,7 +29,10 @@ class AuthenticatedSessionController extends Controller
             'password' => 'required',
         ]);
 
-        Auth::attempt($request->only('username', 'password'));
+        if (!Auth::attempt($request->only('username', 'password'))) {
+            return back()->withInput($request->only('username'))
+                ->with('error', 'Username atau password salah.');
+        }
 
         $request->session()->regenerate();
 
@@ -39,7 +42,7 @@ class AuthenticatedSessionController extends Controller
             return redirect('/admin/dashboard');
         }
 
-        return redirect()->intended(route('user.dashboard'));
+        return redirect()->intended(route('user.home'));
     }
 
 

@@ -8,8 +8,10 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\User\PageController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ListProductController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -28,19 +30,26 @@ Route::get('/', function () {
         if (Auth::user()->id_role == 1) {
             return redirect()->route('admin.dashboard');
         } elseif (Auth::user()->id_role == 2) {
-            return redirect()->route('user.dashboard');
+            return redirect()->route('user.home');
         }
     }
     return view('auth.login');
 });
 
 Route::middleware(['auth', 'role:1'])->group(function () {
-        Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+
+     Route::get('products', [ListProductController::class, 'index'])->name('product.index');
+    Route::post('products', [ListProductController::class, 'store'])->name('product.store');
+    Route::put('products/{id}', [ListProductController::class, 'update'])->name('product.update');
+    Route::delete('products/{id}', [ListProductController::class, 'destroy'])->name('product.destroy');
+    Route::get('products/search', [ListProductController::class, 'search'])->name('product.search');
 
 });
 
 Route::middleware(['auth', 'role:2'])->group(function () {
-    Route::get('/user/dashboard', [ProductController::class, 'index'])->name('user.dashboard');
+    Route::get('/user/home', [PageController::class, 'index'])->name('user.home');
+    Route::get('/user/product', [ProductController::class, 'index'])->name('user.dashboard');
     Route::get('/user/profile', [UserController::class, 'edit'])->name('user.profile.edit');
     Route::put('/user/profile', [UserController::class, 'update'])->name('user.profile.update');
 

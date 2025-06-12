@@ -26,7 +26,7 @@ class RoleMiddleware
             if ($user->id_role == 1) {
                 return redirect()->route('admin.dashboard');
             } elseif ($user->id_role == 2) {
-                return redirect()->route('user.dashboard');
+                return redirect()->route('user.home');
             } else {
                 return redirect('/')->with('error', 'You do not have permission to access this page.');
             }

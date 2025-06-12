@@ -12,7 +12,7 @@ class OrderController extends Controller
 {
         public function userOrders(Request $request)
         {
-        $orders = $request->user()->orders()->with('orderItems.product', 'payment')->orderBy('created_at', 'asc')->paginate(10);
+        $orders = $request->user()->orders()->with('orderItems.product', 'payment')->orderBy('id', 'desc')->paginate(10);
         return view('user.orders', compact('orders'));
         }
 

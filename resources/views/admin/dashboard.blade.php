@@ -1,6 +1,11 @@
 @extends('layouts.admin-layout')
 
 @section('content')
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Selamat Datang, {{ Auth::user() ? Auth::user()->username : 'Admin' }}
+        </h1>
+        <p class="text-gray-600 mt-2">Silakan kelola data dan pantau statistik di bawah ini.</p>
+    </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-white rounded-lg shadow p-6 flex items-center">
             <div class="bg-blue-100 text-blue-600 rounded-full p-3 mr-4">
@@ -10,7 +15,7 @@
                 </svg>
             </div>
             <div>
-                <div class="text-2xl font-bold">{{ $usersCount ?? 0 }}</div>
+                <div class="text-2xl font-bold">{{ $totalUsers ?? 0 }}</div>
                 <div class="text-gray-500">Total Users</div>
             </div>
         </div>
@@ -21,7 +26,7 @@
                 </svg>
             </div>
             <div>
-                <div class="text-2xl font-bold">{{ $productsCount ?? 0 }}</div>
+                <div class="text-2xl font-bold">{{ $totalProducts ?? 0 }}</div>
                 <div class="text-gray-500">Total Products</div>
             </div>
         </div>
@@ -33,52 +38,62 @@
                 </svg>
             </div>
             <div>
-                <div class="text-2xl font-bold">{{ $ordersCount ?? 0 }}</div>
+                <div class="text-2xl font-bold">{{ $totalOrders ?? 0 }}</div>
                 <div class="text-gray-500">Total Orders</div>
             </div>
         </div>
     </div>
     <div class="mt-10 bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-bold mb-4">Traffic Penjualan</h2>
-        <canvas id="salesTrafficChart" height="100"></canvas>
+        <h2 class="text-xl font-bold mb-4">Grafik Penjualan 7 Hari Terakhir</h2>
+        <canvas id="salesTrafficChart" height="100" width="400"></canvas>
     </div>
+
+    @php
+        $salesLabels = $salesTraffic->pluck('date')->map(function ($date) {
+            return \Carbon\Carbon::parse($date)->format('d M');
+        });
+        $salesData = $salesTraffic->pluck('total');
+    @endphp
 
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/wavesurfer.js"></script>
         <script>
-            const ctx = document.getElementById('salesTrafficChart').getContext('2d');
-            const salesTrafficChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: {!! json_encode($salesLabels ?? []) !!},
-                    datasets: [{
-                        label: 'Penjualan',
-                        data: {!! json_encode($salesData ?? []) !!},
-                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                        borderColor: 'rgba(59, 130, 246, 1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 4,
-                        pointBackgroundColor: 'rgba(59, 130, 246, 1)'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
+            document.addEventListener('DOMContentLoaded', function() {
+                const ctx = document.getElementById('salesTrafficChart').getContext('2d');
+                const salesTrafficChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: {!! json_encode($salesLabels) !!},
+                        datasets: [{
+                            label: 'Penjualan',
+                            data: {!! json_encode($salesData) !!},
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.5, // tension tinggi untuk efek gelombang
+                            pointRadius: 4,
+                            pointBackgroundColor: 'rgba(59, 130, 246, 1)'
+                        }]
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
                             }
                         }
                     }
-                }
+                });
             });
         </script>
     @endpush

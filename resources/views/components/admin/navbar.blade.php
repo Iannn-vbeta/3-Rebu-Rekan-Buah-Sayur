@@ -4,7 +4,7 @@
         class="w-64 bg-gray-800 text-white p-4 flex flex-col fixed md:static inset-y-0 left-0 z-30 transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-in-out md:w-64 md:block">
         <div class="flex items-center justify-between mb-4">
             <h4 class="text-lg font-bold">Admin Panel</h4>
-            <!-- Close Button on mobile -->
+            <!-- Close Button -->
             <button id="closeSidebar" class="md:hidden text-white p-2 rounded focus:outline-none hidden">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
                     stroke-linecap="round" stroke-linejoin="round">
@@ -14,9 +14,8 @@
         </div>
         <nav class="flex-1">
             <a href="#" class="block py-2 px-4 rounded hover:bg-gray-700">Dashboard</a>
-            <a href="#" class="block py-2 px-4 rounded hover:bg-gray-700">Users</a>
-            <a href="#" class="block py-2 px-4 rounded hover:bg-gray-700">Settings</a>
-            <a href="#" class="block py-2 px-4 rounded hover:bg-gray-700">Reports</a>
+            <a href="{{ route('product.index') }}"
+                class="block py-2 px-4 rounded hover:bg-gray-700">{{ __('Produk') }}</a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="block w-full text-left py-2 px-4 rounded hover:bg-gray-700">
@@ -26,7 +25,7 @@
         </nav>
     </div>
 
-    <!-- Hamburger Button (only on mobile) -->
+    <!-- Hamburger menu -->
     <button id="hamburger"
         class="md:hidden fixed top-4 left-4 z-40 bg-gray-800 text-white p-2 rounded focus:outline-none">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
@@ -35,12 +34,11 @@
         </svg>
     </button>
 
-    <!-- Overlay (for mobile sidebar) -->
+    <!-- Overlay mobile  -->
     <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden md:hidden"></div>
 
     <!-- Content -->
     <div class="flex-1 flex flex-col">
-        <!-- Main Content -->
         <div class="p-6 overflow-y-auto flex-1">
             {{ $isi }}
         </div>
