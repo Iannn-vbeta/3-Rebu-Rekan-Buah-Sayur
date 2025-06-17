@@ -1,15 +1,5 @@
 <x-guest-layout>
-    @if (session('status'))
-        <div class="mb-4 text-green-600 text-sm">
-            {{ session('status') }}
-        </div>
-    @endif
 
-    @if (session('error'))
-        <div class="mb-4 text-sm text-red-600">
-            {{ session('error') }}
-        </div>
-    @endif
 
     <div class="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
         <div class="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
@@ -17,6 +7,17 @@
                 <h1 class="text-5xl xl:text-4xl font-medium text-green-800">
                     3-REBU
                 </h1>
+                @if (session('status'))
+                    <div class="mb-4 text-green-600 text-sm">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="mb-4 text-sm text-red-600">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <div class="w-full flex-1 mt-8">
                     <form class="mx-auto max-w-xs" method="POST" action="{{ route('login') }}">
                         @csrf

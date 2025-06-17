@@ -26,9 +26,9 @@
             class="px-2 py-1 rounded text-green-800 font-semibold transition hover:bg-green-50 hover:shadow-sm focus:outline-none">
             Produk
         </a>
-        <a href="#"
+        <a href="{{ route('user.masukan') }}"
             class="px-2 py-1 rounded text-green-800 font-semibold transition hover:bg-green-50 hover:shadow-sm focus:outline-none">
-            Tentang Kami
+            Kritik dan Saran
         </a>
     </div>
 
@@ -92,9 +92,9 @@
                 class="block px-2 py-2 rounded text-green-800 font-semibold hover:bg-green-50 hover:shadow-sm transition">Home</a>
             <a href="{{ route('user.dashboard') }}"
                 class="block px-2 py-2 rounded text-green-800 font-semibold hover:bg-green-50 hover:shadow-sm transition">Produk</a>
-            <a href="#"
-                class="block px-2 py-2 rounded text-green-800 font-semibold hover:bg-green-50 hover:shadow-sm transition">Tentang
-                Kami</a>
+            <a href="{{ route('user.masukan') }}"
+                class="block px-2 py-2 rounded text-green-800 font-semibold hover:bg-green-50 hover:shadow-sm transition">Kritik
+                dan Saran</a>
             <div class="border-t pt-3 mt-2">
                 <div class="relative">
                     <button id="mobile-user-menu"

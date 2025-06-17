@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>Document</title>
+        <title>@yield('title', '3-REBU')</title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <style>
             html {
@@ -23,7 +23,7 @@
         <div>
             @yield('content')
         </div>
-        <script src="https://unpkg.com/scrollreveal"></script>
+        {{-- <script src="https://unpkg.com/scrollreveal"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 ScrollReveal().reveal('.flex-col, .rounded-lg, .text-center, .font-bold, .p-4', {
@@ -35,7 +35,7 @@
                     reset: false
                 });
             });
-        </script>
+        </script> --}}
     </body>
 
 </html>

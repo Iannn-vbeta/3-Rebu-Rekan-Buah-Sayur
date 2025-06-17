@@ -26,4 +26,17 @@
 
 
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                ScrollReveal().reveal('.flex-col, .rounded-lg, .text-center, .font-bold, .p-4', {
+                    distance: '40px',
+                    duration: 900,
+                    easing: 'ease-in-out',
+                    origin: 'bottom',
+                    interval: 10,
+                    reset: false
+                });
+            });
+        </script>
     @endsection

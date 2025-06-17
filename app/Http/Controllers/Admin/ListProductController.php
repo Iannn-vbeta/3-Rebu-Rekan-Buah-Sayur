@@ -30,7 +30,7 @@ class ListProductController extends Controller
         }
 
         Product::create($validated);
-        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambah');
+        return redirect()->back()->with('success', 'Produk berhasil ditambah');
     }
 
     public function update(Request $request, $id)
@@ -46,24 +46,28 @@ class ListProductController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            if ($product->image) {
+            if ($product->image && Storage::disk('public')->exists($product->image)) {
                 Storage::disk('public')->delete($product->image);
             }
             $validated['image'] = $request->file('image')->store('products', 'public');
+        } else {
+            unset($validated['image']);
         }
 
         $product->update($validated);
 
-        return redirect()->route('products.index')->with('success', 'Produk berhasil diupdate');
+        return redirect()->back()->with('success', 'Produk berhasil diupdate');
     }
 
-    public function destroy(Product $product)
+    public function destroy($id)
     {
+        $product = Product::findOrFail($id);
+
         if ($product->image) {
             Storage::disk('public')->delete($product->image);
         }
         $product->delete();
-        return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus');
+        return redirect()->back()->with('success', 'Produk berhasil dihapus');
     }
 
     public function search(Request $request)

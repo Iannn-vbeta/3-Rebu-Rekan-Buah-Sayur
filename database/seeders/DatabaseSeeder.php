@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Product;
@@ -13,11 +14,14 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ShippingInfo;
 use App\Models\Payment;
+use Carbon\Carbon;
 
 class DatabaseSeeder extends Seeder
 {
     public function run()
     {
+        $now = Carbon::now();
+
         // Roles
         $adminRole = Role::create(['role' => 'admin']);
         $buyerRole = Role::create(['role' => 'pembeli']);
@@ -27,14 +31,22 @@ class DatabaseSeeder extends Seeder
             'id_role' => $adminRole->id_role,
             'username' => 'Admin',
             'email' => 'admin@lykos.com',
+            'email_verified_at' => $now,
             'password' => Hash::make('password123'),
+            'remember_token' => Str::random(10),
+            'created_at' => $now,
+            'updated_at' => $now,
         ]);
 
         $buyer = User::create([
             'id_role' => $buyerRole->id_role,
             'username' => 'User',
             'email' => 'user@lykos.com',
+            'email_verified_at' => $now,
             'password' => Hash::make('password123'),
+            'remember_token' => Str::random(10),
+            'created_at' => $now,
+            'updated_at' => $now,
         ]);
 
         // Products
@@ -44,50 +56,70 @@ class DatabaseSeeder extends Seeder
             'price' => 120000,
             'stock' => 100,
             'image' => 'kaos_anime.jpg',
+            'created_at' => $now,
+            'updated_at' => $now,
         ]);
+
         $product2 = Product::create([
             'name' => 'Gantungan Kunci Game',
             'description' => 'Gantungan kunci dengan tema video game',
             'price' => 45000,
             'stock' => 200,
             'image' => 'gantungan_kunci.jpg',
+            'created_at' => $now,
+            'updated_at' => $now,
         ]);
 
-        // Cart for buyer
-        $cart = Cart::create(['user_id' => $buyer->id]);
+        // Cart
+        $cart = Cart::create([
+            'user_id' => $buyer->id,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
 
         CartItem::create([
             'cart_id' => $cart->id,
             'product_id' => $product1->id,
             'quantity' => 2,
+            'created_at' => $now,
+            'updated_at' => $now,
         ]);
+
         CartItem::create([
             'cart_id' => $cart->id,
             'product_id' => $product2->id,
             'quantity' => 1,
+            'created_at' => $now,
+            'updated_at' => $now,
         ]);
 
         // Order
+        $totalPrice = 120000 * 2 + 45000;
+
         $order = Order::create([
             'user_id' => $buyer->id,
-            'total_price' => 120000*2 + 45000*1,
+            'total_price' => $totalPrice,
             'status' => 'pending',
-            'created_at' => now(),
-            'updated_at' => now(),
+            'created_at' => $now,
+            'updated_at' => $now,
         ]);
 
-        // Order Items
         OrderItem::create([
             'order_id' => $order->id,
             'product_id' => $product1->id,
             'quantity' => 2,
             'price' => 120000,
+            'created_at' => $now,
+            'updated_at' => $now,
         ]);
+
         OrderItem::create([
             'order_id' => $order->id,
             'product_id' => $product2->id,
             'quantity' => 1,
             'price' => 45000,
+            'created_at' => $now,
+            'updated_at' => $now,
         ]);
 
         // Shipping Info
@@ -98,6 +130,9 @@ class DatabaseSeeder extends Seeder
             'city' => 'Jakarta',
             'phone' => '08123456789',
             'notes' => 'Tolong dikemas dengan rapi',
+            'status_barang' => 'belum selesai',
+            'created_at' => $now,
+            'updated_at' => $now,
         ]);
 
         // Payment
@@ -106,8 +141,10 @@ class DatabaseSeeder extends Seeder
             'payment_gateway' => 'midtrans',
             'payment_status' => 'pending',
             'transaction_id' => null,
-            'amount' => 120000*2 + 45000*1,
+            'amount' => $totalPrice,
             'paid_at' => null,
+            'created_at' => $now,
+            'updated_at' => $now,
         ]);
     }
 }

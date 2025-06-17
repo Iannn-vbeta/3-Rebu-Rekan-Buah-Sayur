@@ -15,17 +15,17 @@
                     <form class="mx-auto max-w-xs" method="POST" action="{{ route('register') }}">
                         @csrf
                         <div class="relative mt-8">
-                            <input type="text" name="name" id="name" placeholder=" "
+                            <input type="text" name="username" id="username" placeholder=" "
                                 class="block w-full appearance-none bg-transparent border-0 border-b-2 border-green-300 focus:border-green-600 focus:ring-0 text-lg px-0 py-2 transition-all duration-200 peer"
-                                autocomplete="name" required />
-                            <label for="name"
+                                autocomplete="username" required />
+                            <label for="username"
                                 class="absolute left-0 top-2 text-green-700 text-base duration-200 transform -translate-y-6 scale-75 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 pointer-events-none">
                                 <svg class="inline-block w-5 h-5 mr-1 text-green-600" fill="none"
                                     stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path
                                         d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                                 </svg>
-                                Name
+                                Username
                             </label>
                         </div>
                         <div class="relative mt-8">

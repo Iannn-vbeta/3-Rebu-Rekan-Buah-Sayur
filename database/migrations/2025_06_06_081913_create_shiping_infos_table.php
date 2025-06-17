@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->string('phone');
             $table->text('notes')->nullable();
+            $table->enum('status_barang',['selesai','belum selesai'])->default('belum selesai');
             $table->timestamps();
         });
     }

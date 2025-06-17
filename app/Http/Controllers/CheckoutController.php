@@ -51,7 +51,7 @@ class CheckoutController extends Controller
         $order = Order::create([
             'user_id' => $user->id,
             'total_price' => $totalPrice,
-            'status' => 'pending',
+            'status' => 'paid',
         ]);
 
         // Simpan item yang di order
@@ -79,20 +79,31 @@ class CheckoutController extends Controller
         Config::$isProduction = env('MIDTRANS_PRODUCTION', false);
         Config::$isSanitized = true;
         Config::$is3ds = true;
+        Config::$overrideNotifUrl = route('midtrans.callback'); // Pastikan nama route sesuai
 
-        // Data transaksi Midtrans
+        $items_details = [];
+        foreach ($cart->cartItems as $item) {
+            $items_details[] = [
+                'id' => $item->product->id,
+                'price' => $item->product->price,
+                'quantity' => $item->quantity,
+                'name' => $item->product->name,
+            ];
+        }
+
         $params = [
             'transaction_details' => [
-                'order_id' => $order->id,
+                'order_id' => $order->id+55,
                 'gross_amount' => $totalPrice,
             ],
+            'item_details' => $items_details,
             'customer_details' => [
-                'first_name' => $user->name,
+                'first_name' => $user->username,
                 'email' => $user->email,
                 'phone' => $request->phone,
             ],'callback' => [
                 'finish' => route('checkout.process'),
-            ],'notification_url' => 'https://cfb8-103-160-182-90.ngrok-free.app/midtrans/callback',
+            ]
         ];
 
         $snapToken = Snap::getSnapToken($params);
@@ -101,10 +112,18 @@ class CheckoutController extends Controller
         Payment::create([
             'order_id' => $order->id,
             'payment_gateway' => 'midtrans',
-            'payment_status' => 'pending', 
+            'payment_status' => 'success', 
             'amount' => $totalPrice,
             'snap_token' => $snapToken, 
         ]);
+
+        foreach ($cart->cartItems as $item) {
+            $product = $item->product;
+            if ($product->stock !== null) {
+                $product->stock = max(0, $product->stock - $item->quantity);
+                $product->save();
+            }
+        }
 
         $cart->cartItems()->delete();
 
@@ -129,6 +148,7 @@ public function checkoutProcess(Request $request)
     Config::$isProduction = config('midtrans.is_production', false);
     Config::$isSanitized = true;
     Config::$is3ds = true;
+    Config::$overrideNotifUrl = route('midtrans.callback'); // Pastikan nama route sesuai
 
     $transaction_details = [
         'order_id' => $order->id,
@@ -161,7 +181,6 @@ public function checkoutProcess(Request $request)
 
     $snapToken = Snap::getSnapToken($params);
 
-    // Simpan token di order/payment jika perlu
 
     return view('user.payment', compact('snapToken', 'order'));
 }

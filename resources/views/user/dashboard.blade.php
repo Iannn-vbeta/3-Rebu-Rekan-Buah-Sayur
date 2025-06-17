@@ -15,6 +15,7 @@
                         </div>
                         <div class="p-4 flex flex-col flex-1">
                             <h2 class="text-lg font-semibold text-gray-800 mb-1 font-sans">{{ $product->name }}</h2>
+                            <p class="text-sm text-gray-600 mb-3 font-sans">{{ Str::limit($product->description, 50) }}</p>
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-base font-bold text-green-700 font-sans">Rp
                                     {{ number_format($product->price, 0, ',', '.') }}</span>

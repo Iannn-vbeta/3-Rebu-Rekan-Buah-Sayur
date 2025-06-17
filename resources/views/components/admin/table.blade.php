@@ -24,7 +24,7 @@
                 <td class="border p-2">{{ $product->description }}</td>
                 <td class="border p-2">Rp{{ number_format($product->price, 0, ',', '.') }}</td>
                 <td class="border p-2 text-center">{{ $product->stock }}</td>
-                <td class="border p-2">
+                <td class="border p-2 text-center">
                     <button
                         onclick="openEditModal(
                             '{{ $product->id }}',
